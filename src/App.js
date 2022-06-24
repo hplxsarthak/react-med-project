@@ -5,10 +5,7 @@ import Home from "./components/pages/Home";
 import Login from "./components/pages/Login";
 import Users from "./components/pages/Users";
 import Navbar from "./components/layout/Navbar";
-
-const Page404 = () => {
-  return <h1>404</h1>;
-};
+import Notfound from "./components/pages/Notfound";
 
 function App() {
   return (
@@ -20,7 +17,7 @@ function App() {
         <Route path="/users" element={<Users />}></Route>
 
         {/* When no route matches we use path="*" which means that this will be rendered */}
-        <Route path="*" element={<Page404 />}></Route>
+        <Route path="*" element={<Notfound />}></Route>
       </Routes>
     </div>
   );
