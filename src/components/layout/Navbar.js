@@ -3,23 +3,28 @@ import { Link, NavLink } from "react-router-dom";
 
 const Navbar = () => {
     return (
-        <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <nav className="navbar navbar-expand-lg navbar-dark bg-primary">
             <div className="container">
-                <Link to="/home" class="navbar-brand">
+                <Link to="/home" className="navbar-brand">
                     Hplx User
                 </Link>
-                <div className="collapse navbar-collapse">
-                    <ul className="navbar-nav me-auto mb-2 mb-lg-0">
-                        <li className="nav-item active">
-                            <NavLink exact to="/home" className="nav-link">Home</NavLink>
-                        </li>
-                        <li className="nav-item">
-                            <NavLink exact to= "/login" className="nav-link">Login</NavLink>
-                        </li>
-                        <li className="nav-item">
-                            <NavLink exact to="/users" className="nav-link">Users</NavLink>
-                        </li>
-                    </ul>
+                <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span className="navbar-toggler-icon"></span>
+                </button>
+                <div className="collapse navbar-collapse" id="navbarSupportedContent">
+                    <div className="collapse navbar-collapse">
+                        <ul className="navbar-nav mr-auto">
+                            <li className="nav-item active">
+                                <NavLink to="/home" className="nav-link">Home</NavLink>
+                            </li>
+                            <li className="nav-item">
+                                <NavLink to="/login" className="nav-link">Login</NavLink>
+                            </li>
+                            <li className="nav-item">
+                                <NavLink to="/users" className="nav-link">Users</NavLink>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
             </div>
         </nav>
