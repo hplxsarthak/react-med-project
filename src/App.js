@@ -8,6 +8,7 @@ import Users from "./components/pages/Users";
 import Navbar from "./components/layout/Navbar";
 import Notfound from "./components/pages/Notfound";
 import AddMed from "./components/Catalog/AddMed";
+import EditMed from "./components/Catalog/EditMed";
 
 function App() {
   return (
@@ -17,7 +18,8 @@ function App() {
         <Route path="/home" element={<Home />}></Route>
         <Route path="/login" element={<Login />}></Route>
         <Route path="/users" element={<Users />}></Route>
-        <Route path="/med/add" element={<AddMed />}></Route>
+        <Route path="/home/add" element={<AddMed />}></Route>
+        <Route path="/home/edit/:id" element={<EditMed />}></Route>
 
         {/* When no route matches we use path="*" which means that this will be rendered */}
         <Route path="*" element={<Notfound />}></Route>

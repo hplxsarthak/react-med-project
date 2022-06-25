@@ -34,6 +34,7 @@ const Home = () => {
                     <tbody>
                         {
                             meds.map((med,index) => {
+                                const id = med.ID;
                                 return (
                                     <tr>
                                         <th scope="row">{index + 1}</th>
@@ -43,7 +44,7 @@ const Home = () => {
                                         <td>{med.Strength}</td>
                                         <td>{med.Med_Type}</td>
                                         <td>
-                                            <Link to="/home" className="btn btn-outline-primary" style={{"marginRight": 10}}>Edit</Link>
+                                            <Link to={`/home/edit/${id}`} className="btn btn-outline-primary" style={{"marginRight": 10}}>Edit</Link>
                                             <Link to="/login"className="btn btn-danger " >Delete</Link>
                                         </td>
                                     </tr>

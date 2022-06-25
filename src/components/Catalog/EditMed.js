@@ -1,9 +1,11 @@
-import React, { useState } from "react";
-import axios from "axios";
-import { useNavigate } from "react-router-dom";
 
-const AddMed = () => {
+import React, { useEffect, useState } from "react";
+import axios from "axios";
+import { useNavigate, useParams } from "react-router-dom";
+
+const EditMed = () => {
     let navigate = useNavigate();
+    const { id } = useParams();
     const [med,setMed] = useState({
         med_name: "",
         comp_name: "",
@@ -14,6 +16,10 @@ const AddMed = () => {
 
     const {med_name,comp_name,brand,strength,med_type} = med;
 
+    useEffect(() => {
+        loadMed();
+    },[])
+
     const handleInputChange = e => {
         setMed({...med, [e.target.name]: e.target.value})
     }
@@ -21,17 +27,28 @@ const AddMed = () => {
     const handleSubmit = async e => {
         e.preventDefault();
         
-        await axios.post("http://localhost:8080/med/", med);
+        await axios.put(`http://localhost:8080/med/${id}`, med);
         navigate("/home")
 
 
     }
 
+    const loadMed = async () => {
+        const medicine = await axios.get(`http://localhost:8080/med/${id}`)
+        console.log(medicine.data)
+        setMed({
+            med_name: medicine.data.Med_Name,
+            comp_name: medicine.data.Comp_Name,
+            brand: medicine.data.Brand,
+            strength: medicine.data.Strength,
+            med_type: medicine.data.Med_Type,
+        })
+    }
 
     return (
         <div className="container">
             <div className="w-75 mx-auto shadow p-5">
-                <h2 className="text-center mb-4">Add Medicine</h2>
+                <h2 className="text-center mb-4">Edit Medicine</h2>
                 <form onSubmit={e => handleSubmit(e)}>
                     <div className="form-group">
                         <input
@@ -88,11 +105,11 @@ const AddMed = () => {
                         />
                     </div>
                     <br />
-                    <button className="btn btn-primary btn-block">Add Medicine</button>
+                    <button className="btn btn-warning btn-block">Update Medicine</button>
                 </form>
             </div>
         </div>
     )
 }
 
-export default AddMed;
+export default EditMed;
