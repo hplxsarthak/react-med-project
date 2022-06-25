@@ -15,6 +15,11 @@ const Home = () => {
         setMeds(response.data.reverse())
     }
 
+    const deleteMed = async id => {
+        await axios.delete(`http://localhost:8080/med/${id}`);
+        loadMed();
+    }
+
     return (
         <div className="container">
             <div className="py-4">
@@ -45,7 +50,7 @@ const Home = () => {
                                         <td>{med.Med_Type}</td>
                                         <td>
                                             <Link to={`/home/edit/${id}`} className="btn btn-outline-primary" style={{"marginRight": 10}}>Edit</Link>
-                                            <Link to="/login"className="btn btn-danger " >Delete</Link>
+                                            <Link to="/home" className="btn btn-danger " onClick={() => deleteMed(id)}>Delete</Link>
                                         </td>
                                     </tr>
                                 )
