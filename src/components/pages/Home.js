@@ -12,7 +12,7 @@ const Home = () => {
     const loadMed = async () => {
         const response = await axios.get("http://localhost:8080/med/");
         console.log("Response", response)
-        setMeds(response.data)
+        setMeds(response.data.reverse())
     }
 
     return (
