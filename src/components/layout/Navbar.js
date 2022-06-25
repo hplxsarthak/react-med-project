@@ -25,7 +25,7 @@ const Navbar = () => {
                     </ul>
                 </div>
 
-                <button className="btn btn-outline-light">Add Medicine</button>
+                <Link to="/med/add" className="btn btn-outline-light">Add Medicine</Link>
 
             </div>
         </nav>
