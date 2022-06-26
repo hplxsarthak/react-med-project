@@ -1,5 +1,5 @@
 import React from "react";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, useNavigate } from "react-router-dom";
 import "../node_modules/bootstrap/dist/css/bootstrap.css";
 import "../node_modules/bootstrap/dist/js/bootstrap.min.js";
 import Home from "./components/pages/Home";
@@ -11,10 +11,12 @@ import AddMed from "./components/Catalog/AddMed";
 import EditMed from "./components/Catalog/EditMed";
 
 function App() {
+  const Navigate = useNavigate();
   return (
     <div className="App">
       <Navbar />
       <Routes>
+        <Route path="/" element={<Home />}></Route>
         <Route path="/home" element={<Home />}></Route>
         <Route path="/login" element={<Login />}></Route>
         <Route path="/users" element={<Users />}></Route>

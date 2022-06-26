@@ -23,8 +23,6 @@ const AddMed = () => {
         
         await axios.post("http://localhost:8080/med/", med);
         navigate("/home")
-
-
     }
 
 
