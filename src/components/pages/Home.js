@@ -5,15 +5,20 @@ import { Link } from "react-router-dom";
 const Home = () => {
     const [meds, setMeds] = useState([]);
     const [search,setSearch] = useState("");
+    const [page,setPage] = useState(1)
+    const [totalPages,setTotalPages] = useState(0);
+    const limit = 3
 
     useEffect(() => {
         loadMed();
-    }, [search])
+    }, [search,page])
 
     const loadMed = async () => {
-        const response = await axios.get(`http://localhost:8080/med/search?s=${search}`);
+        const response = await axios.get(`http://localhost:8080/med/search&pages?s=${search}&page=${page}&limit=${limit}`);
         console.log("Response", response.data);
-        setMeds(response.data.reverse())
+        setTotalPages(response.data.total_page);
+
+        setMeds(response.data.data.reverse())
     }
 
     const deleteMed = async id => {
@@ -32,6 +37,25 @@ const Home = () => {
     //         })
     //         .catch(err => console.log(err));
     // }
+
+    // pagination
+    const getPrevPage = () => {
+        let pageNum = page;
+        if (pageNum == 1)
+            return;
+
+        setPage(page-1);
+        return;
+    }
+
+    const getNextPage = () => {
+        let pageNums = page;
+        if (pageNums == totalPages)
+            return;
+
+        setPage(page+1);
+        return;
+    }
 
     return (
         <div className="container">
@@ -94,13 +118,11 @@ const Home = () => {
 
                     </tbody>
                 </table>
-                <nav className="d-flex justify-content-center">
-                    <ul className="pagination">
-                        <li className="pagination-item">Previous</li>
-                        <li className="pagination-item">Next</li>
-                    </ul>
-
-                </nav>
+                <div className="d-flex justify-content-center align-items-center" style={{"width": "100%"}}>
+                    <button className="btn btn-primary" onClick={() => getPrevPage()}>PREV</button>
+                    <p>{page} of {totalPages}</p>
+                    <button className="btn btn-primary" onClick={() => getNextPage()}>NEXT</button>
+                </div>
             </div>
         </div>
     )
