@@ -8,11 +8,11 @@ const Home = () => {
 
     useEffect(() => {
         loadMed();
-    }, [])
+    }, [search])
 
     const loadMed = async () => {
-        const response = await axios.get("http://localhost:8080/med/");
-        console.log("Response", response)
+        const response = await axios.get(`http://localhost:8080/med/search?s=${search}`);
+        console.log("Response", response.data);
         setMeds(response.data.reverse())
     }
 
@@ -21,17 +21,17 @@ const Home = () => {
         loadMed();
     }
 
-    const handleSearch = async e => {
-        e.preventDefault();
-        await axios
-            .get(`http://localhost:8080/med/search?s=${search}`)
-            .then((response) => {
-                console.log(response);
-                setMeds(response.data.reverse());
-                setSearch("");
-            })
-            .catch(err => console.log(err));
-    }
+    // const handleSearch = async e => {
+    //     e.preventDefault();
+    //     await axios
+    //         .get(`http://localhost:8080/med/search?s=${search}`)
+    //         .then((response) => {
+    //             console.log(response);
+    //             setMeds(response.data.reverse());
+    //             setSearch("");
+    //         })
+    //         .catch(err => console.log(err));
+    // }
 
     return (
         <div className="container">
@@ -43,7 +43,8 @@ const Home = () => {
                     alignContent: "center"
                 }}
                 className="d-flex input-group w-auto"
-                onSubmit={e => handleSearch(e)}
+                // onSubmit={e => handleSearch(e)}
+                onSubmit={e => e.preventDefault()}
             >
                 <input 
                     type="text"
@@ -52,7 +53,7 @@ const Home = () => {
                     value={search}
                     onChange={(e) => setSearch(e.target.value)}
                 />
-                <button className="btn btn-dark btn-block" >Search</button>
+                {/* <button className="btn btn-dark btn-block" >Search</button> */}
 
             </form>
 
@@ -93,6 +94,13 @@ const Home = () => {
 
                     </tbody>
                 </table>
+                <nav className="d-flex justify-content-center">
+                    <ul className="pagination">
+                        <li className="pagination-item">Previous</li>
+                        <li className="pagination-item">Next</li>
+                    </ul>
+
+                </nav>
             </div>
         </div>
     )
