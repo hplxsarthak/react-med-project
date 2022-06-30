@@ -1,29 +1,45 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const Home = () => {
     const [meds, setMeds] = useState([]);
-    const [search,setSearch] = useState("");
-    const [page,setPage] = useState(1)
-    const [totalPages,setTotalPages] = useState(0);
+    const [search, setSearch] = useState("");
+    const [page, setPage] = useState(1)
+    const [totalPages, setTotalPages] = useState(0);
     const limit = 3
+    const navigate = useNavigate();
+
 
     useEffect(() => {
         loadMed();
-    }, [search,page])
+    }, [search, page])
 
     const loadMed = async () => {
-        const response = await axios.get(`http://localhost:8080/med/search&pages?s=${search}&page=${page}&limit=${limit}`);
-        console.log("Response", response.data);
-        setTotalPages(response.data.total_page);
+        await axios
+            .get(`http://localhost:8080/med/search&pages?s=${search}&page=${page}&limit=${limit}`, { withCredentials: true })
+            .then((response) => {
+                console.log("Response", response.data);
+                setTotalPages(response.data.total_page);
+                setMeds(response.data.data.reverse())
+            })
+            .catch(err => {
+                console.log("error", err.response.data)
+                navigate("/login")
+                
+            })
 
-        setMeds(response.data.data.reverse())
+
     }
 
     const deleteMed = async id => {
-        await axios.delete(`http://localhost:8080/med/${id}`);
-        loadMed();
+        await axios
+            .delete(`http://localhost:8080/med/${id}`)
+            .then(() => loadMed())
+            .catch(err => {
+                console.log("error", err.response.data)
+                navigate("/login")
+            })
     }
 
     // const handleSearch = async e => {
@@ -41,25 +57,25 @@ const Home = () => {
     // pagination
     const getPrevPage = () => {
         let pageNum = page;
-        if (pageNum == 1)
+        if (pageNum === 1)
             return;
 
-        setPage(page-1);
+        setPage(page - 1);
         return;
     }
 
     const getNextPage = () => {
         let pageNums = page;
-        if (pageNums == totalPages)
+        if (pageNums === totalPages)
             return;
 
-        setPage(page+1);
+        setPage(page + 1);
         return;
     }
 
     return (
         <div className="container">
-            <form 
+            <form
                 style={{
                     margin: "auto",
                     padding: "15px",
@@ -70,7 +86,7 @@ const Home = () => {
                 // onSubmit={e => handleSearch(e)}
                 onSubmit={e => e.preventDefault()}
             >
-                <input 
+                <input
                     type="text"
                     className="form-control"
                     placeholder="Search Medicine Name..."
@@ -118,7 +134,7 @@ const Home = () => {
 
                     </tbody>
                 </table>
-                <div className="d-flex justify-content-center align-items-center" style={{"width": "100%"}}>
+                <div className="d-flex justify-content-center align-items-center" style={{ "width": "100%" }}>
                     <button className="btn btn-primary" onClick={() => getPrevPage()}>PREV</button>
                     <p>{page} of {totalPages}</p>
                     <button className="btn btn-primary" onClick={() => getNextPage()}>NEXT</button>

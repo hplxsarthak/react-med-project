@@ -4,25 +4,30 @@ import { useNavigate } from "react-router-dom";
 
 const AddMed = () => {
     let navigate = useNavigate();
-    const [med,setMed] = useState({
+    const [med, setMed] = useState({
         med_name: "",
         comp_name: "",
         brand: "",
-        strength:"",
-        med_type:"",
+        strength: "",
+        med_type: "",
     });
 
-    const {med_name,comp_name,brand,strength,med_type} = med;
+    const { med_name, comp_name, brand, strength, med_type } = med;
 
     const handleInputChange = e => {
-        setMed({...med, [e.target.name]: e.target.value})
+        setMed({ ...med, [e.target.name]: e.target.value })
     }
 
     const handleSubmit = async e => {
         e.preventDefault();
-        
-        await axios.post("http://localhost:8080/med/", med);
-        navigate("/home")
+
+        await axios
+            .post("http://localhost:8080/med/", med, { withCredentials: true })
+            .then(res => navigate("/home"))
+            .catch(err => {
+                console.log("error", err.response.data)
+                navigate("/login")
+            })
     }
 
 
@@ -38,10 +43,10 @@ const AddMed = () => {
                             placeholder="Enter Medicine Name/SKU"
                             name="med_name"
                             value={med_name}
-                            onChange = {e => handleInputChange(e)}
+                            onChange={e => handleInputChange(e)}
                         />
                     </div>
-                    <br/>
+                    <br />
                     <div className="form-group">
                         <input
                             type="text"
@@ -49,10 +54,10 @@ const AddMed = () => {
                             placeholder="Enter Comapany Name"
                             name="comp_name"
                             value={comp_name}
-                            onChange = {e => handleInputChange(e)}
+                            onChange={e => handleInputChange(e)}
                         />
                     </div>
-                    <br/>
+                    <br />
                     <div className="form-group">
                         <input
                             type="text"
@@ -60,7 +65,7 @@ const AddMed = () => {
                             placeholder="Enter Brand Name"
                             name="brand"
                             value={brand}
-                            onChange = {e => handleInputChange(e)}
+                            onChange={e => handleInputChange(e)}
                         />
                     </div>
                     <br />
@@ -71,7 +76,7 @@ const AddMed = () => {
                             placeholder="Enter Strength in mg"
                             name="strength"
                             value={strength}
-                            onChange = {e => handleInputChange(e)}
+                            onChange={e => handleInputChange(e)}
                         />
                     </div>
                     <br />
@@ -82,7 +87,7 @@ const AddMed = () => {
                             placeholder="Enter Medicine type tab/bot/inj"
                             name="med_type"
                             value={med_type}
-                            onChange = {e => handleInputChange(e)}
+                            onChange={e => handleInputChange(e)}
                         />
                     </div>
                     <br />

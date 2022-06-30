@@ -4,24 +4,29 @@ import { useNavigate } from "react-router-dom";
 
 const AddUser = () => {
     let navigate = useNavigate();
-    const [user,setUser] = useState({
+    const [user, setUser] = useState({
         name: "",
         email: "",
         password: "",
-        role:"",
+        role: "",
     });
 
-    const {name, email, password, role} = user;
+    const { name, email, password, role } = user;
 
     const handleInputChange = e => {
-        setUser({...user, [e.target.name]: e.target.value})
+        setUser({ ...user, [e.target.name]: e.target.value })
     }
 
     const handleSubmit = async e => {
         e.preventDefault();
-        
-        await axios.post("http://localhost:8080/user/", user);
-        navigate("/users")
+
+        await axios
+            .post("http://localhost:8080/user/", user, { withCredentials: true })
+            .then(res => navigate("/users"))
+            .catch(err => {
+                console.log("error", err.response.data)
+                navigate("/login")
+            })
     }
 
 
@@ -37,10 +42,10 @@ const AddUser = () => {
                             placeholder="Enter User's Name"
                             name="name"
                             value={name}
-                            onChange = {e => handleInputChange(e)}
+                            onChange={e => handleInputChange(e)}
                         />
                     </div>
-                    <br/>
+                    <br />
                     <div className="form-group">
                         <input
                             type="text"
@@ -48,11 +53,11 @@ const AddUser = () => {
                             placeholder="Enter Email"
                             name="email"
                             value={email}
-                            onChange = {e => handleInputChange(e)}
+                            onChange={e => handleInputChange(e)}
                             required
                         />
                     </div>
-                    <br/>
+                    <br />
                     <div className="form-group">
                         <input
                             type="text"
@@ -60,7 +65,7 @@ const AddUser = () => {
                             placeholder="Enter Password"
                             name="password"
                             value={password}
-                            onChange = {e => handleInputChange(e)}
+                            onChange={e => handleInputChange(e)}
                             required
                         />
                     </div>
@@ -72,7 +77,7 @@ const AddUser = () => {
                             placeholder="Enter Role Admin/User"
                             name="role"
                             value={role}
-                            onChange = {e => handleInputChange(e)}
+                            onChange={e => handleInputChange(e)}
                             required
                         />
                     </div>

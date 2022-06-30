@@ -6,43 +6,54 @@ import { useNavigate, useParams } from "react-router-dom";
 const EditMed = () => {
     let navigate = useNavigate();
     const { id } = useParams();
-    const [med,setMed] = useState({
+    const [med, setMed] = useState({
         med_name: "",
         comp_name: "",
         brand: "",
-        strength:"",
-        med_type:"",
+        strength: "",
+        med_type: "",
     });
 
-    const {med_name,comp_name,brand,strength,med_type} = med;
+    const { med_name, comp_name, brand, strength, med_type } = med;
 
     useEffect(() => {
         loadMed();
-    },[])
+    }, [])
 
     const handleInputChange = e => {
-        setMed({...med, [e.target.name]: e.target.value})
+        setMed({ ...med, [e.target.name]: e.target.value })
     }
 
     const handleSubmit = async e => {
         e.preventDefault();
-        
-        await axios.put(`http://localhost:8080/med/${id}`, med);
-        navigate("/home")
 
+        await axios
+            .put(`http://localhost:8080/med/${id}`, med, { withCredentials: true }).then(res => navigate("/home"))
+            .then(res => navigate("/home"))
+            .catch(err => {
+                console.log("error", err.response.data)
+                navigate("/login")
+            })
 
     }
 
     const loadMed = async () => {
-        const medicine = await axios.get(`http://localhost:8080/med/${id}`)
-        console.log(medicine.data)
-        setMed({
-            med_name: medicine.data.Med_Name,
-            comp_name: medicine.data.Comp_Name,
-            brand: medicine.data.Brand,
-            strength: medicine.data.Strength,
-            med_type: medicine.data.Med_Type,
-        })
+        await axios
+            .get(`http://localhost:8080/med/${id}`, { withCredentials: true })
+            .then(res => {
+                setMed({
+                    med_name: res.data.Med_Name,
+                    comp_name: res.data.Comp_Name,
+                    brand: res.data.Brand,
+                    strength: res.data.Strength,
+                    med_type: res.data.Med_Type,
+                })
+            })
+            .catch(err => {
+                console.log("error", err.response.data)
+                navigate("/login")
+            })
+
     }
 
     return (
@@ -57,10 +68,10 @@ const EditMed = () => {
                             placeholder="Enter Medicine Name/SKU"
                             name="med_name"
                             value={med_name}
-                            onChange = {e => handleInputChange(e)}
+                            onChange={e => handleInputChange(e)}
                         />
                     </div>
-                    <br/>
+                    <br />
                     <div className="form-group">
                         <input
                             type="text"
@@ -68,10 +79,10 @@ const EditMed = () => {
                             placeholder="Enter Comapany Name"
                             name="comp_name"
                             value={comp_name}
-                            onChange = {e => handleInputChange(e)}
+                            onChange={e => handleInputChange(e)}
                         />
                     </div>
-                    <br/>
+                    <br />
                     <div className="form-group">
                         <input
                             type="text"
@@ -79,7 +90,7 @@ const EditMed = () => {
                             placeholder="Enter Brand Name"
                             name="brand"
                             value={brand}
-                            onChange = {e => handleInputChange(e)}
+                            onChange={e => handleInputChange(e)}
                         />
                     </div>
                     <br />
@@ -90,7 +101,7 @@ const EditMed = () => {
                             placeholder="Enter Strength in mg"
                             name="strength"
                             value={strength}
-                            onChange = {e => handleInputChange(e)}
+                            onChange={e => handleInputChange(e)}
                         />
                     </div>
                     <br />
@@ -101,7 +112,7 @@ const EditMed = () => {
                             placeholder="Enter Medicine type tab/bot/inj"
                             name="med_type"
                             value={med_type}
-                            onChange = {e => handleInputChange(e)}
+                            onChange={e => handleInputChange(e)}
                         />
                     </div>
                     <br />

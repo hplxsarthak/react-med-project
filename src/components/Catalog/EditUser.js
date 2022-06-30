@@ -5,40 +5,49 @@ import { useNavigate, useParams } from "react-router-dom";
 const EditUser = () => {
     let navigate = useNavigate();
     const { id } = useParams();
-    const [user,setUser] = useState({
+    const [user, setUser] = useState({
         name: "",
         email: "",
         password: "",
-        role:"",
+        role: "",
     });
 
-    const {name,email,password,role} = user;
+    const { name, email, password, role } = user;
 
     useEffect(() => {
         loadUser();
-    },[])
+    }, [])
 
     const handleInputChange = e => {
-        setUser({...user, [e.target.name]: e.target.value})
+        setUser({ ...user, [e.target.name]: e.target.value })
     }
 
     const handleSubmit = async e => {
         e.preventDefault();
-        
-        await axios.put(`http://localhost:8080/user/${id}`, user);
-        navigate("/users")
 
-
+        await axios
+            .put(`http://localhost:8080/user/${id}`, user)
+            .then(res => navigate("/users"))
+            .catch(err => {
+                console.log("error", err.response.data)
+                navigate("/login")
+            })
     }
 
     const loadUser = async () => {
-        const prev_user = await axios.get(`http://localhost:8080/user/${id}`)
-        setUser({
-            name: prev_user.data.Name,
-            email: prev_user.data.Email,
-            password: prev_user.data.Password,
-            role: prev_user.data.role
-        })
+        await axios.get(`http://localhost:8080/user/${id}`, { withCredentials: true })
+            .then(res => {
+                setUser({
+                    name: res.data.Name,
+                    email: res.data.Email,
+                    password: res.data.Password,
+                    role: res.data.role
+                })
+            })
+            .catch(err => {
+                console.log("error", err.response.data)
+                navigate("/login")
+            })
     }
 
     return (
@@ -53,10 +62,10 @@ const EditUser = () => {
                             placeholder="Enter User's Name"
                             name="name"
                             value={name}
-                            onChange = {e => handleInputChange(e)}
+                            onChange={e => handleInputChange(e)}
                         />
                     </div>
-                    <br/>
+                    <br />
                     <div className="form-group">
                         <input
                             type="text"
@@ -64,10 +73,10 @@ const EditUser = () => {
                             placeholder="Enter Email"
                             name="email"
                             value={email}
-                            onChange = {e => handleInputChange(e)}
+                            onChange={e => handleInputChange(e)}
                         />
                     </div>
-                    <br/>
+                    <br />
                     <div className="form-group">
                         <input
                             type="text"
@@ -75,7 +84,7 @@ const EditUser = () => {
                             placeholder="Enter Password"
                             name="password"
                             value={password}
-                            onChange = {e => handleInputChange(e)}
+                            onChange={e => handleInputChange(e)}
                         />
                     </div>
                     <br />
@@ -86,7 +95,7 @@ const EditUser = () => {
                             placeholder="Enter Role"
                             name="role"
                             value={role}
-                            onChange = {e => handleInputChange(e)}
+                            onChange={e => handleInputChange(e)}
                         />
                     </div>
                     <br />

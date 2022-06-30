@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const Users = () => {
     const [users, setUsers] = useState([]);
@@ -8,22 +8,34 @@ const Users = () => {
     const [page, setPage] = useState(1)
     const [totalPages, setTotalPages] = useState(0);
     const limit = 3
+    const navigate = useNavigate();
 
     useEffect(() => {
         loadUser();
     }, [search, page])
 
     const loadUser = async () => {
-        const response = await axios.get(`http://localhost:8080/user/search&pages?s=${search}&page=${page}&limit=${limit}`);
-        console.log("Response", response.data);
-        setTotalPages(response.data.total_page);
-
-        setUsers(response.data.data.reverse())
+        await axios
+        .get(`http://localhost:8080/user/search&pages?s=${search}&page=${page}&limit=${limit}`,{withCredentials: true})
+            .then((response) => {
+                console.log("Response", response.data);
+                setTotalPages(response.data.total_page);
+                setUsers(response.data.data.reverse())
+            })
+            .catch(err => {
+                console.log("error", err.response.data)
+                navigate("/login")
+            })
     }
 
     const deleteUser = async id => {
-        await axios.delete(`http://localhost:8080/user/${id}`);
-        loadUser();
+        await axios
+        .delete(`http://localhost:8080/user/${id}`,{withCredentials: true})
+        .then(() => loadUser())
+            .catch(err => {
+                console.log("error", err.response.data)
+                navigate("/login")
+            })
     }
 
     // const handleSearch = async e => {
@@ -41,7 +53,7 @@ const Users = () => {
     // pagination
     const getPrevPage = () => {
         let pageNum = page;
-        if (pageNum == 1)
+        if (pageNum === 1)
             return;
 
         setPage(page - 1);
@@ -50,7 +62,7 @@ const Users = () => {
 
     const getNextPage = () => {
         let pageNums = page;
-        if (pageNums == totalPages)
+        if (pageNums === totalPages)
             return;
 
         setPage(page + 1);
