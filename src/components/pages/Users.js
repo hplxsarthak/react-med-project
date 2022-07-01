@@ -118,8 +118,8 @@ const Users = () => {
                                             <td>{user.Password}</td>
                                             <td>{user.Role}</td>
                                             <td>
-                                                <Link to={`/user/edit/${id}`} className="btn btn-outline-primary" style={{ "marginRight": 10 }}>Edit</Link>
-                                                <Link to="/user" className="btn btn-danger " onClick={() => deleteUser(id)}>Delete</Link>
+                                                <Link to={`/users/edit/${id}`} className="btn btn-outline-primary" style={{ "marginRight": 10 }}>Edit</Link>
+                                                <Link to="/users" className="btn btn-danger " onClick={() => deleteUser(id)}>Delete</Link>
                                             </td>
                                         </tr>
                                     )

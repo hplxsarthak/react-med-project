@@ -26,8 +26,8 @@ const EditUser = () => {
         e.preventDefault();
 
         await axios
-            .put(`http://localhost:8080/user/${id}`, user)
-            .then(res => navigate("/users"))
+            .put(`http://localhost:8080/user/${id}`, user, {withCredentials: true})
+            .then(() => navigate("/users"))
             .catch(err => {
                 console.log("error", err.response.data)
                 navigate("/login")
@@ -41,7 +41,7 @@ const EditUser = () => {
                     name: res.data.Name,
                     email: res.data.Email,
                     password: res.data.Password,
-                    role: res.data.role
+                    role: res.data.Role
                 })
             })
             .catch(err => {
